@@ -29,9 +29,24 @@ idCont continente.id%type;
 idRegi region.id%type;
 idPais pais.id%type;
 BEGIN
+    IF (NEW.aerea < 0 OR NEW.maritima < 0)
+    THEN
+        RAISE EXCEPTION '%', 'Aerea and Maritima must be >= 0.';
+    END IF;
+
     IF (NEW.aerea + NEW.maritima <> NEW.total)
     THEN
-        RAISE EXCEPTION '%', 'Total doesnt match the sum';
+        RAISE EXCEPTION '%', 'Total doesnt match the sum.';
+    END IF;
+
+    IF (NEW.anio <= 0)
+    THEN
+        RAISE EXCEPTION '%', 'Anio must  be greater than 0.';
+    END IF;
+
+    IF (NEW.anio < 1903 AND NEW.aerea <> 0)
+    THEN
+        RAISE EXCEPTION '%', 'Aereal tourists cant arrive before planes were invented.';
     END IF;
     
     SELECT id INTO idCont FROM continente WHERE continente.nombre=NEW.continente;

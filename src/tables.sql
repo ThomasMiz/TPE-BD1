@@ -31,7 +31,7 @@ CREATE TABLE pais (
 );
 
 CREATE TABLE anio (
-    anio INT NOT NULL,
+    anio INT NOT NULL CHECK (anio > 0),
     esBisiesto BOOLEAN NOT NULL,
     PRIMARY KEY(anio)
 );
