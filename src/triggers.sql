@@ -40,7 +40,7 @@ BEGIN
 
     IF (NEW.aerea + NEW.maritima <> NEW.total)
     THEN
-        RAISE EXCEPTION '%', 'Total doesnt match the sum.';
+        RAISE WARNING '%', 'Total doesnt match the sum. Value will be replaced by the actual sum.';
     END IF;
 
     IF (NEW.anio <= 0)
