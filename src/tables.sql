@@ -39,8 +39,8 @@ CREATE TABLE anio (
 CREATE TABLE turismoDatos (
     idPais INT NOT NULL,
     anio INT NOT NULL,
-    aerea INT NOT NULL,
-    maritima INT NOT NULL,
+    aerea INT NOT NULL CHECK (aerea >= 0),
+    maritima INT NOT NULL CHECK (maritima >= 0),
     PRIMARY KEY(idPais, anio),
     FOREIGN KEY(idPais) REFERENCES pais(id) ON DELETE CASCADE,
     FOREIGN KEY(anio) REFERENCES anio(anio) ON DELETE CASCADE
