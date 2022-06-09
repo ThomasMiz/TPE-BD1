@@ -55,13 +55,13 @@ BEGIN
         INSERT INTO continente (nombre) VALUES (NEW.continente) RETURNING id INTO idCont;
     END IF;
     
-    SELECT id INTO idRegi FROM region WHERE region.nombre=NEW.region;
+    SELECT id INTO idRegi FROM region WHERE region.nombre=NEW.region AND region.idContinente=idCont;
     IF (idRegi IS NULL)
     THEN
         INSERT INTO region (idContinente, nombre) VALUES (idCont, NEW.region) RETURNING id INTO idRegi;
     END IF;
     
-    SELECT id INTO idPais FROM pais WHERE pais.nombre=NEW.pais;
+    SELECT id INTO idPais FROM pais WHERE pais.nombre=NEW.pais AND pais.idRegion=idRegi;
     IF (idPais IS NULL)
     THEN
         INSERT INTO pais (idRegion, nombre) VALUES (idRegi, NEW.pais) RETURNING id INTO idPais;
