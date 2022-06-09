@@ -1,11 +1,17 @@
-CREATE OR REPLACE FUNCTION IsLeapYear(anio IN anio.anio%type)
+DROP FUNCTION IF EXISTS IsLeapYear;
+DROP TRIGGER IF EXISTS TrgTurismoAnioInsertingOrUpdating ON turismodatos;
+DROP TRIGGER IF EXISTS TrgInsertOrUpdateTurismo ON turismo;
+DROP FUNCTION IF EXISTS OnTurismoAnioInsertingOrUpdating;
+DROP FUNCTION IF EXISTS OnInsertOrUpdateTurismo;
+
+CREATE FUNCTION IsLeapYear(anio anio.anio%type)
 RETURNS BOOLEAN AS $$
 BEGIN
     RETURN (anio % 4 = 0) AND (anio % 100 <> 0 OR anio % 400 = 0);
 END
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION OnTurismoAnioInsertingOrUpdating()
+CREATE FUNCTION OnTurismoAnioInsertingOrUpdating()
 RETURNS TRIGGER AS $$
 DECLARE c INT;
 BEGIN
@@ -18,11 +24,9 @@ BEGIN
 END
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE TRIGGER TrgTurismoAnioInsertingOrUpdating
-BEFORE INSERT OR UPDATE OF anio ON turismoDatos FOR EACH ROW
-EXECUTE PROCEDURE OnTurismoAnioInsertingOrUpdating();
+CREATE TRIGGER TrgTurismoAnioInsertingOrUpdating BEFORE INSERT OR UPDATE OF anio ON turismoDatos FOR EACH ROW EXECUTE PROCEDURE OnTurismoAnioInsertingOrUpdating();
 
-CREATE OR REPLACE FUNCTION OnInsertOrUpdateTurismo()
+CREATE FUNCTION OnInsertOrUpdateTurismo()
 RETURNS TRIGGER AS $$
 DECLARE
 idCont continente.id%type;
@@ -72,6 +76,4 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE TRIGGER TrgInsertOrUpdateTurismo
-INSTEAD OF INSERT OR UPDATE ON turismo FOR EACH ROW
-EXECUTE PROCEDURE OnInsertOrUpdateTurismo();
+CREATE TRIGGER TrgInsertOrUpdateTurismo INSTEAD OF INSERT OR UPDATE ON turismo FOR EACH ROW EXECUTE PROCEDURE OnInsertOrUpdateTurismo();
