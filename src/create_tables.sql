@@ -2,7 +2,8 @@ DROP TABLE IF EXISTS continente CASCADE;
 DROP TABLE IF EXISTS region CASCADE;
 DROP TABLE IF EXISTS pais CASCADE;
 DROP TABLE IF EXISTS anio CASCADE;
-DROP TABLE IF EXISTS turismo CASCADE;
+DROP TABLE IF EXISTS turismoDatos CASCADE;
+DROP VIEW IF EXISTS turismo;
 
 CREATE TABLE continente (
     id SERIAL,
@@ -35,7 +36,7 @@ CREATE TABLE anio (
     PRIMARY KEY(anio)
 );
 
-CREATE TABLE turismo (
+CREATE TABLE turismoDatos (
     idPais INT NOT NULL,
     anio INT NOT NULL,
     aerea INT NOT NULL,
@@ -44,3 +45,8 @@ CREATE TABLE turismo (
     FOREIGN KEY(idPais) REFERENCES pais(id) ON DELETE CASCADE,
     FOREIGN KEY(anio) REFERENCES anio(anio) ON DELETE CASCADE
 );
+
+CREATE VIEW turismo AS
+SELECT pais.nombre AS pais, (aerea+maritima) AS total, aerea, maritima, region.nombre AS region, continente.nombre AS continente, anio
+FROM turismoDatos JOIN pais ON turismoDatos.idPais=pais.id JOIN
+region ON pais.idRegion=region.id JOIN continente ON region.idContinente=continente.id;
